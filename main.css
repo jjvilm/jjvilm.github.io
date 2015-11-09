@@ -1,3 +1,19 @@
-.html {
+.nav {
 	background-image: url('www.nasa.gov/sites/default/files/thumbnails/image/darkrift-orig_full.jpg')
 }
+
+h1 {
+	color: #5a5a5a;
+	font-size: 12px;
+	font-weight: bold;
+	padding-top: auto;
+	padding-bottom: auto;
+	padding-right: auto;
+	padding-left: auto;
+	text-transform: uppercase;
+}
+
+{background-image: url('photojournal.jpl.nasa.gov/jpeg/PIA11796.jgp')}
+
+
+
