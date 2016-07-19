@@ -59,23 +59,6 @@ CoinWidgetCom.go({
 });
 </script>
 <script>
-	var video = document.querySelector("#videoElement");
- 
-navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
- 
-if (navigator.getUserMedia) {       
-    navigator.getUserMedia({video: true}, handleVideo, videoError);
-}
- 
-function handleVideo(stream) {
-    video.src = window.URL.createObjectURL(stream);
-}
- 
-function videoError(e) {
-    // do something
-}
-</script>
-<script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
