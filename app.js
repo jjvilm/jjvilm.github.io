@@ -22,24 +22,6 @@ function loadJSON(path, success, error) {
   {
     data = Data;
     return;
-  
-    // Output only the details on the first post
-    console.log(Data[5]);
-  
-    // output the details of first three posts
-    console.log("First three posts");
-    for(var i=0; i<3; i=i+1)
-    {
-      console.log(Data[i]);
-    } 
-    // output the id field of first five elements. 
-    console.log("First five ID");
-    for(var i=0; i<5; i=i+1)
-    {
-      console.log(Data[i].id);
-      console.log(Data[i].name);
-
-    }
   }
 
 window.addEventListener('load', () => {
@@ -55,7 +37,7 @@ window.addEventListener('load', () => {
         }
  
         for(var i=0; i < data.length; i++) {
-            console.log(data[i].name);
+//             console.log(data[i].name);
             // if (data[i].name.toLowerCase() == task) {
             if (data[i].name.toLowerCase().includes(task)) {
                 task = [data[i].name, data[i].id];
