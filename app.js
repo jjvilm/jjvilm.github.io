@@ -1,4 +1,7 @@
+// use for storing player data
 var data;
+loadJSON("https://www.wildernessp2e.com:5001/highscore", playerData, getFromLocalStorage);
+
 // loadJSON method to open the JSON file.
 function loadJSON(path, success, error) {
     var xhr = new XMLHttpRequest();
@@ -14,20 +17,19 @@ function loadJSON(path, success, error) {
     };
     xhr.open('GET', path, true);
     xhr.send();
-  }
-  
-  function playerData(Data)
-  {
+}
+function playerData(Data){
     data = Data;
+    // stores a copy of data locally
+    localStorage.setItem("data", JSON.stringify(data));
     return;
-  }
-
-
+}
+function getFromLocalStorage() {
+  data = localStorage.getItem("data")
+  data = JSON.parse(data)
+}
 function alertNotice(key, uinput) {
   return `'${key}' Found!\n\nOK--continue search for: ${uinput}\nCancel--Display Results`
-  // return `'${key}' Found!\n\nOK--Display Results\nCancel--Continue search for:\n ${uinput}`
-
-
 }
 function parseStrings(uid) {
   // find player, display alert with name, if correct player display stats
@@ -40,7 +42,6 @@ function parseStrings(uid) {
   for(let i=0; i < data.length; i++) {
     // name found here
     if (data[i][key].toLowerCase().includes(uid)) {
-      // let search = confirm(`${data[i].name} Found\n\nContinue searching for a different ${uid}?`)
       let search = confirm(alertNotice(data[i].name, uid))
       // continue searching for player
       if (!search) {
@@ -54,12 +55,10 @@ function parseStrings(uid) {
     }
   } 
 }
-
 function parseInts(uid) {
   for(var i=0; i < data.length; i++) {
     // name found here
     if (data[i].rank == uid) {
-      // let search = confirm(`${data[i].name} Found\n\nContinue searching for a different ${uid}?`)
       let search = confirm(alertNotice(data[i].name, uid))
       // continue searching for player
       if (!search) {
@@ -73,10 +72,6 @@ function parseInts(uid) {
     }
   } 
 }
-  
-  
-  loadJSON("https://www.wildernessp2e.com:5001/highscore", playerData,'jsonp');
-
 const hds = {
   Name: "name",
   ID: "id",
@@ -121,9 +116,7 @@ window.addEventListener('load', () => {
         task_content_el.classList.add('content');
         
         task_el.appendChild(task_content_el);
-        
-            
-        // let selPlayer = searchPlayer(task)
+                    
         // Don't do anything if no player found, return instead
         if (!selPlayer) {
           input.value = ''
@@ -138,7 +131,6 @@ window.addEventListener('load', () => {
           task_input_el.setAttribute('readonly', 'readonly');
           task_content_el.appendChild(task_input_el);
         }
-
         
         const task_actions_el = document.createElement('div');
         task_actions_el.classList.add('actions');
