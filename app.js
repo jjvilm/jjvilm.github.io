@@ -1,6 +1,7 @@
 // use for storing player data
 var data;
-loadJSON("https://www.wildernessp2e.com:5001/highscore", playerData, getFromLocalStorage);
+getFromLocalStorage();
+// loadJSON("https://www.wildernessp2e.com:5001/highscore", playerData, getFromLocalStorage);
 
 // loadJSON method to open the JSON file.
 function loadJSON(path, success, error) {
@@ -18,15 +19,47 @@ function loadJSON(path, success, error) {
     xhr.open('GET', path, true);
     xhr.send();
 }
+
+function errorHandler(er) {
+  console.log(er);
+  console.log("Seems like website is down")
+  return;
+}
 function playerData(Data){
     data = Data;
+    const today = Date.now()
+    // bundles date and data together to check date if more than 1 day
+    let pdata = [today,Data];
+
     // stores a copy of data locally
-    localStorage.setItem("data", JSON.stringify(data));
+    // localStorage.clear()
+    localStorage.setItem("data", JSON.stringify(pdata));
     return;
 }
 function getFromLocalStorage() {
-  data = localStorage.getItem("data")
-  data = JSON.parse(data)
+  // try to get from local storage first if it exists
+  try {
+    // array of 2, index: 0-date, 1-pdata
+    let pdata = localStorage.getItem("data")
+    pdata = JSON.parse(pdata)
+    // gets date 
+    let pastDate = pdata[0]
+    // retreive data locally
+    data = pdata[1]
+    // console.log(data)
+    console.log("loaded from local storage")
+    // fetch new data if data older than 1 day 86400000 msecs in 1 day
+    const now = Date.now();
+    if ( (now - pastDate) >= 86400000 ) {
+      console.log("Data old, fetching new")
+      loadJSON("https://www.wildernessp2e.com:5001/highscore", playerData, errorHandler);
+    }
+  // otherwise try to load from server if no local copy
+  } catch {
+    console.log("fetching from server")
+    loadJSON("https://www.wildernessp2e.com:5001/highscore", playerData, errorHandler);
+
+  }
 }
 function alertNotice(key, uinput) {
   return `'${key}' Found!\n\nOK--continue search for: ${uinput}\nCancel--Display Results`
@@ -76,14 +109,20 @@ const hds = {
   Name: "name",
   ID: "id",
   Rank: "rank",
-  CB: "cblevel",
-  CB_XP: "totalxp",
-  M_Lv: "magiclevel",
+  Combat: "cblevel",
+  Total_XP: "totalxp",
+  Magic: "magiclevel",
   M_Xp: "magic_xp",
-  D_Lv: "defencelevel",
+  Defence: "defencelevel",
   D_Xp: "defence_xp",
-  H_Lv: "hplevel",
-  H_Xp: "health_xp"
+  HP: "hplevel",
+  H_Xp: "health_xp",
+  Agility: "agilitylevel",
+  A_Xp: "agility_xp",
+  Cooking: "cookinglevel",
+  C_Xp: "cooking_xp",
+  Potion: "potionlevel",
+  P_Xp: "potion_xp"
 }
 
 window.addEventListener('load', () => {
@@ -122,12 +161,14 @@ window.addEventListener('load', () => {
           input.value = ''
           return
         }
+        // put data together
         for (const j of Object.keys(hds)) {
   
           const task_input_el = document.createElement('input');
           task_input_el.classList.add('text');
           task_input_el.type = 'text';
           task_input_el.value = j + ": " + selPlayer[hds[j]];
+          console.log(selPlayer[hds[j]])
           task_input_el.setAttribute('readonly', 'readonly');
           task_content_el.appendChild(task_input_el);
         }
